@@ -425,8 +425,10 @@ static void row_output_res(void) {
     opt_choice_list("TOTK_OUTPUT_RES", UI_MENU_OUTPUT_RES, vals, names, N, UI_MENU_OUTPUT_RES_DESC);
 }
 
+// The game's own final pass is FSR 1 EASU from the scene to the output (resolution.c), so the scales of AMD's FSR
+// quality modes (scene per side = output / 2.0, 1.7, 1.5, 1.3) carry their names.
 static void row_render_scale(void) {
-    static const char *const vals[] = {"game", "50", "67", "75", "100", "125", "150", "200"};
+    static const char *const vals[] = {"game", "50", "59", "67", "75", "77", "100", "125", "150", "200"};
     enum { N = sizeof vals / sizeof *vals };
     char shown[N][32];
     const char *names[N];
@@ -435,6 +437,10 @@ static void row_render_scale(void) {
         snprintf(shown[i], sizeof shown[i], "%s %%", vals[i]);
         names[i] = shown[i];
     }
+    names[1] = menu_text(UI_MENU_RENDER_SCALE_FSR_PERF);
+    names[2] = menu_text(UI_MENU_RENDER_SCALE_FSR_BALANCED);
+    names[3] = menu_text(UI_MENU_RENDER_SCALE_FSR_QUALITY);
+    names[5] = menu_text(UI_MENU_RENDER_SCALE_FSR_ULTRA);
     opt_choice_list("TOTK_RENDER_SCALE", UI_MENU_RENDER_SCALE, vals, names, N, UI_MENU_RENDER_SCALE_DESC);
 }
 
@@ -637,6 +643,7 @@ static void tab_advanced(float scale) {
     static ActionNote copy_note, log_note;
     opt_begin("##advanced", scale);
     opt_text(UI_MENU_ADV_WARNING, true);
+    opt_toggle("TOTK_AMD_PRESET", UI_MENU_AMD_PRESET, UI_MENU_AMD_PRESET_DESC);
 
     opt_group(UI_MENU_GROUP_SCHED);
     static const UiTextId preempt[] = {UI_MENU_PREEMPT_OFF, UI_MENU_PREEMPT_ON, UI_MENU_PREEMPT_INHERIT};   // 0|1|2
@@ -682,6 +689,7 @@ static void tab_advanced(float scale) {
     static const UiTextId dyn[] = {UI_MENU_AUTO, UI_MENU_OFF, UI_MENU_ON};   // unset, 0, 1
     opt_choice("TOTK_VK_DYN_VERTEX", UI_MENU_VK_DYN_VERTEX, dyn, 3, UI_MENU_VK_DYN_VERTEX_DESC);
     opt_toggle("TOTK_VK_SUBGROUP_PIN", UI_MENU_VK_SUBGROUP_PIN, UI_MENU_VK_SUBGROUP_PIN_DESC);
+    opt_toggle("TOTK_VK_RECORDER", UI_MENU_VK_RECORDER, UI_MENU_VK_RECORDER_DESC);
 
     opt_group(UI_MENU_GROUP_DIAG);
     row_set_or_not("TOTK_TRACE", UI_MENU_TRACE, UI_MENU_TRACE_DESC, "perf");

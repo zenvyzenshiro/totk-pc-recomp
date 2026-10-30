@@ -376,6 +376,13 @@ int probe_cfg(void) {
         if (!ok) fprintf(stderr, "FAIL cfg: default '%s' of %s is not one of its values '%s'\n", m->def, m->key, m->values), fails++;
     }
     CHECK(listed >= 30, "the defaults table was walked");
+    _putenv_s("TOTK_AMD_PRESET", "1");
+    CHECK(EQ(cfg_value("TOTK_ASTC"), "cpu") && rt_knob("VK_RECORDER", "1") == 0, "amd_preset fills unset keys");
+    _putenv_s("TOTK_ASTC", "gpu");
+    CHECK(EQ(cfg_value("TOTK_ASTC"), "gpu"), "a set key beats amd_preset");
+    _putenv_s("TOTK_ASTC", "");
+    _putenv_s("TOTK_AMD_PRESET", "");
+    CHECK(EQ(cfg_value("TOTK_ASTC"), "auto"), "amd_preset off: the table default");
     printf("probe-cfg: %s\n", fails ? "FAIL" : "ok");
     return fails ? 1 : 0;
 }

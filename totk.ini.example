@@ -91,6 +91,12 @@
 # vk_dyn_vertex = 1
 # Pin the shader subgroup size to 32 when the GPU allows it.
 # vk_subgroup_pin = 1
+# Record the replay's Vulkan commands on a recorder thread (vk_rec.c): 1 = on, 0 = the submitting thread makes them,
+# ab = switched with the A/B blocks.
+# vk_recorder = 1
+# AMD compatibility preset: keys left unset here take vk_recorder = 0 and astc = cpu, the stable start configuration
+# for RDNA 2 (RX 6000) after VK_ERROR_DEVICE_LOST reports. A key set on its own line wins over the preset.
+# amd_preset = 0
 
 [display]
 # Presentation mode: mailbox (default when the driver offers it, vsync otherwise), fifo (vsync) or immediate.
@@ -110,6 +116,8 @@
 # output_res = 1920x1080
 # 3D render scale: the scene's size relative to the game resolution, game (5/6, the game's own 1600x900 at 1080p) or
 # a percentage (25 to 400, at most 4096 pixels a side); above 100 supersamples the scene (anti-aliasing). Read at start.
+# The game upscales the scene with FSR 1; AMD's FSR quality modes are 50 (Performance), 59 (Balanced), 67 (Quality)
+# and 77 (Ultra Quality).
 # render_scale = game
 # Scaling to the window when it is larger than the game resolution: fsr (AMD FSR 1) or bilinear, and FSR's sharpening
 # from 0 (off) to 100. Changes while the game runs take effect at once.
